@@ -1,5 +1,18 @@
 
--- 예시
+-- TB_USER
 INSERT INTO
-TB_USER(ID,PW,NAME,EMAIL)
-VALUE('test1','1234','테스트1','a@a.com');
+TB_USER(ID, NAME, EMAIL, PASSWORD, PNS)
+VALUE(?,?,?,?,?);
+-- EX:VALUE('test1','병배','TEST@TEST.COM',1234,'당신의 성향은 XX입니다');
+
+--TB_SEARCH
+INSER INTO
+TB_SEARCH(USER_NO, SEARCH_CON)
+VALUE(?,?);
+-- EX:VALUE(1,'잡주사서 겁나불리는 종목');
+
+--TB_MYSTOCK
+INSERT INTO
+TB_MYSTOCK(USER_NO, STOCK_NAME, STOCK_AICONTENT)
+VALUE(?,?,?);
+-- EX:VALUE(1,'나만죽을수 없지 주식회사','완벽한 한탕입니다 휴먼');
