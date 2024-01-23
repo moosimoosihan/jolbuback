@@ -36,3 +36,12 @@ CREATE TABLE TB_MYSTOCK (
 ) COMMENT = '나의주식'
 ENGINE = InnoDB;
 
+-- 주식가격
+CREATE TABLE TB_STOCK (
+code varchar(50) not null unique,
+opening_price INT,
+high_price INT,
+low_price INT,
+trade_price INT)
+COMMENT = '주식가격'
+engine=InnoDB;
