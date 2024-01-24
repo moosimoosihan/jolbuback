@@ -19,4 +19,17 @@ router.get('/all_stock_info', async (req, res) => {
     })
 });
 
+// 주식 정보 날짜 별로 가져오기
+router.get('/stock_info/:code/:time', async (req, res) => {
+    const code = req.params.code;
+    const time = req.params.time;
+    const sdk = require('api')(`@upbit/v1.4.4#1h2zv2al3jq48nm2`);
+    sdk.month1({market:code,count:time})
+    .then(({data}) => {
+        console.log(data)
+        return res.status(200).json(data);
+    })
+    .catch(err => console.log(err));
+})
+
 module.exports = router;

@@ -1,8 +1,8 @@
 const db = require('./db/db.js');
 const sql = require('./sql.js');
 
-module.exports = (data) => {
-    db.query(sql.check_stock, [data.code], (err, result) => {
+module.exports = async (data) => {
+    await db.query(sql.check_stock, [data.code], (err, result) => {
         if(err) {
             console.log(err);
             return;

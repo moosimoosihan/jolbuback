@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const updateStock = require('./updateStock');
+const stockcode = require('./stockcode');
 
 // 서버 관련
 const WebSocket = require("ws");
@@ -17,10 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 const authRouter = require('./routes/auth');
 const mypageRouter = require('./routes/mypage');
 const stockRouter = require('./routes/stock');
+const openaiRouter = require('./routes/openai');
 
 app.use('/auth', authRouter);
 app.use('/mypage', mypageRouter);
 app.use('/stock', stockRouter);
+app.use('/openai', openaiRouter);
 
 app.listen(3000, () => {
     console.log('Server Running at http://localhost:3000');
@@ -30,7 +33,8 @@ app.listen(3000, () => {
 const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
 
 ws.on("open", () => {
-    ws.send(`[{"ticket": "test example"},{"type": "ticker", "codes": ["KRW-BTC", "KRW-ETH"]},{"format": "DEFAULT"}]`);
+    ws.send(`[{"ticket": "test example"},{"type": "ticker", "codes": [${stockcode()}]},{"format": "DEFAULT"}]`
+    );
 });
 
 ws.on("error", console.error);
