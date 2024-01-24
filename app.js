@@ -1,22 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const server = require('http').createServer(app);
 const updateStock = require('./updateStock');
 
 // 서버 관련
-const jwt = require("jsonwebtoken");
-const {v4: uuidv4} = require('uuid');
 const WebSocket = require("ws");
-
-const io = require('socket.io')(server, {
-    cors: {
-        origin: 'http://localhost:8080',
-        credentials: true,
-    },
-    allowEIO3: true,
-    pingTimeout: 5000,
-});
 
 app.use(cors({
     origin: 'http://localhost:8080',
@@ -38,10 +26,6 @@ app.listen(3000, () => {
     console.log('Server Running at http://localhost:3000');
 });
 
-server.listen(3001, () => {
-    console.log('Server Running at http://localhost:3001');
-})
-
 // 주식 소캣
 const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
 
@@ -54,11 +38,5 @@ var stock;
 ws.on("message", (data) => {
     stock = JSON.parse(data.toString())
     updateStock(stock);
-});
-io.on('connection', function(socket) {
-    socket.on('stock', function(data){
-        console.log(stock)
-        socket.broadcast.emit('stock', stock);
-    });
 });
 ws.on("close", () => console.log("closed!"));
