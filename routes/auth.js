@@ -23,7 +23,7 @@ router.post('/join_process', function (request, response) {
     })
 })
 
-// 로그인 
+// 로그인
 router.post('/login_process', function (request, response) {
     const loginUser = request.body;
 
@@ -68,7 +68,7 @@ router.post('/kakaoLoginProcess', function (request, response) {
                 return response.status(200).json({message:'저장완료'})
             })
         } else {
-        // 로그인 
+        // 로그인
             db.query(sql.get_user_no, [kakao.user_id], function (error, results, fields) {
                 if (error) {
                     console.log(error)
@@ -95,7 +95,7 @@ router.post('/naverlogin', function (request, response) {
             });
         }
         if (results.length > 0) {
-            // 가입된 계정 존재 
+            // 가입된 계정 존재
             db.query(sql.get_user_no, [naverlogin.id], function (error, results, fields) {
                 if (error) {
                     console.log(error)
@@ -105,7 +105,7 @@ router.post('/naverlogin', function (request, response) {
                 })
             })
         } else {
-            // DB에 계정 정보 입력 
+            // DB에 계정 정보 입력
             db.query(sql.naverlogin, [naverlogin.email, naverlogin.id, naverlogin.nickname, null], function (error, result) {
                 if (error) {
                     console.error(error);
@@ -177,5 +177,26 @@ router.post('/find_pass', function (request, response, next) {
 
     });
 });
+
+// 아이디 체크
+router.post('/id_check', function (request, response) {
+    db.query(sql.id_check, [request.body.user_id], function (error, results, fields) {
+        if(error) {
+            return response.status(500).json({
+                message: 'DB_error'
+            })
+        }
+        if (results.length <= 0) {
+            return response.status(200).json({
+                message: 'available_id'
+            })
+        }
+        else {
+            return response.status(200).json({
+                message: 'already_exist_id'
+            })
+        }
+    })
+})
 
 module.exports = router;

@@ -7,8 +7,8 @@ module.exports = {
     kakaoJoin: `INSERT INTO tb_user (id, name, email, social) VALUES(?,?,?,1)`,
     kakao_check: `SELECT * FROM tb_user WHERE id = ? and social = 1`,
     //네이버 로그인
-    naverlogin: `INSERT INTO tb_user (id, , name, email, social) VALUES (?,?,?,2)`,
-    naver_id_check: `SELECT * FROM tb_user WHERE user_id = ? and social = 2`,
+    naverlogin: `INSERT INTO tb_user (id, name, email, social) VALUES (?,?,?,2)`,
+    naver_id_check: `SELECT * FROM tb_user WHERE id = ? and social = 2`,
 
     check_pns : `SELECT pns FROM tb_user WEHRE user_no=?`,
     update_pns : `UPDATE tb_user SET pns=? WHERE user_no=?`,
