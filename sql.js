@@ -10,6 +10,12 @@ module.exports = {
     naverlogin: `INSERT INTO tb_user (id, name, email, social) VALUES (?,?,?,2)`,
     naver_id_check: `SELECT * FROM tb_user WHERE id = ? and social = 2`,
 
+    //openai
+    ai_time_check : `select AI_DATE from tb_ai where user_no = ?`,
+    update_ai: `update tb_ai set ai_date = ? where user_no = ?`,
+    openai_response: `insert into tb_ai (user_no, ai_send, ai_response) values(?,?,?)`,
+
+
     check_pns : `SELECT pns FROM tb_user WEHRE user_no=?`,
     update_pns : `UPDATE tb_user SET pns=? WHERE user_no=?`,
     all_stock_info: `SELECT code, opening_price, high_price, low_price, trade_price FROM tb_stock`,
