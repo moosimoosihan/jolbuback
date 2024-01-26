@@ -35,12 +35,20 @@ router.get('/coin_info_candle/:coin', (req, res) => {
 });
 
 // 코인 정보 가져오기
-router.get('/coin_info/:coin', (req, res) => {
-    const coin = req.params.coin;
-    axios.get(`https://api.bithumb.com/public/ticker/${coin}_KRW`)
+router.post('/coin_info', (req, res) => {
+    var code = req.body.code;
+    axios.get(`https://api.bithumb.com/public/ticker/ALL_KRW`)
         .then(response => {
+            // code가 소문자의 경우 대문자로 변경
+            if(code === code.toLowerCase()){
+                code = code.toUpperCase();
+            }
             const coin_info = response.data;
-            res.status(200).json(coin_info);
+            const coin_info_result = Object.keys(coin_info.data).filter(key => key.includes(code)).reduce((obj, key) => {
+                obj[key] = coin_info.data[key];
+                return obj;
+            }, {});
+            res.status(200).json(coin_info_result);
         })
         .catch(error => {
             console.error(error);
