@@ -48,4 +48,35 @@ router.get('/coin_info/:coin', (req, res) => {
         });
 });
 
+// 찜하기 기능
+router.post('/add_like', (req, res) => {
+    const USER_NO = req.body.user_no;
+    const STOCK_NAME = req.body.stock_name; // STOCK_NAME 변수 정의
+    const stock_like = sql.stock_like;
+
+    db.query(stock_like, [USER_NO, STOCK_NAME], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: '찜하기 중에 오류가 발생했습니다.' });
+        } else {
+            res.status(200).json({ success: true });
+        }
+    });
+});
+
+// 찜하기 취소 기능
+router.post('/delete_like', (req, res) => {
+    const USER_NO = req.body.user_no;
+    const STOCK_NAME = req.body.stock_name; // STOCK_NAME 변수 정의
+    const stock_like_delete = sql.stock_like_delete;
+
+    db.query(stock_like_delete, [USER_NO, STOCK_NAME], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: '찜하기 취소 중에 오류가 발생했습니다.' });
+        } else {
+            res.status(200).json({ success: true });
+        }
+    });
+});
 module.exports = router;
