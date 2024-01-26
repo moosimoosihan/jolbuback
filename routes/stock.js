@@ -57,7 +57,7 @@ router.post('/add_like', (req, res) => {
     db.query(stock_like, [USER_NO, STOCK_NAME], (err, result) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: '찜하기 중에 오류가 발생했습니다.' });
+            res.status(500).json({ success:false, error: '찜하기 중에 오류가 발생했습니다.' });
         } else {
             res.status(200).json({ success: true });
         }
@@ -73,9 +73,27 @@ router.post('/delete_like', (req, res) => {
     db.query(stock_like_delete, [USER_NO, STOCK_NAME], (err, result) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: '찜하기 취소 중에 오류가 발생했습니다.' });
+            res.status(500).json({ success:false, error: '찜하기 취소 중에 오류가 발생했습니다.' });
         } else {
             res.status(200).json({ success: true });
+        }
+    });
+});
+
+// 찜한 목록 가져오기
+router.post('/check_like', (req, res) => {
+    const USER_NO = req.body.user_no;
+
+    db.query(sql.stock_like_check, [USER_NO], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: '찜한 목록을 가져오는 중에 오류가 발생했습니다.' });
+        } else {
+            if(result.length === 0){
+                res.status(200).json({ success: false, result: result });
+            } else {
+                res.status(200).json({ success: true, result: result });
+            }
         }
     });
 });

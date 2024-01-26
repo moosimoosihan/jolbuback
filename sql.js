@@ -19,4 +19,5 @@ module.exports = {
     stock_info: `SELECT code, opening_price, high_price, low_price, trade_price FROM tb_stock WHERE code=?`,
     stock_like: `INSERT INTO TB_MYSTOCK(USER_NO, STOCK_NAME, STOCK_AICONTENT) VALUE(?,?,1)`,
     stock_like_delete: `DELETE FROM TB_MYSTOCK WHERE USER_NO=? AND STOCK_NAME=?`,
+    stock_like_check : `SELECT STOCK_NAME FROM TB_MYSTOCK WHERE USER_NO=?`,
 }
