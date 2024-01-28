@@ -123,20 +123,16 @@ router.post('/naverlogin', function (request, response) {
 
 // 아이디 찾기
 router.post('/findId', function (request, response, next) {
-    const user_email = request.body.user_email;
+    const name = request.query.name;
+    const email = request.query.email;
 
-    db.query(sql.id_find, [user_email], function (error, results, fields) {
+    db.query(sql.check_id, [email, name], function (error, results, fields) {
         if (error) {
             console.error(error);
             return response.status(500).json({ error: '회원 에러' });
         }
-
-        if (results.length === 0) {
-            // 이메일이 데이터베이스에 존재하지 않는 경우
-            return response.status(404).json({ message: 'user_not_found' });
-        }
-
-        const user_id = results[0].user_id; // 사용자 아이디를 가져옴
+        const user_id = results[0].id; // 사용자 아이디를 가져옴
+        console.log(user_id);
         return response.status(200).json({
             message: 'user_email',
             user_id: user_id
@@ -145,38 +141,6 @@ router.post('/findId', function (request, response, next) {
 });
 
 // 비번 찾기
-router.post('/find_pass', function (request, response, next) {
-    const user_id = request.body.user_id;
-    const user_email = request.body.user_email;
-
-    db.query(sql.user_check, [user_email, user_id], async function (error, results, fields) {
-        if (error) {
-            console.error(error);
-            return response.status(500).json({ error: '회원 에러' });
-        }
-
-        if (results.length == 0) {
-            // 이메일이 데이터베이스에 존재하지 않는 경우
-            return response.status(404).json({ message: 'user_not_found' });
-        }
-
-        const user_pw = generateTempPassword(); // 임시 비밀번호 생성
-
-        const encryptedPW = bcrypt.hashSync(user_pw, 10); // 임시 비밀번호 암호화
-
-        // 업데이트
-        db.query(sql.pass_update_tem, [encryptedPW, user_id], function (error, results, fields) {
-            if (error) {
-                console.error(error);
-                return response.status(500).json({ error: '비번 에러' });
-            }
-            return response.status(200).json({
-                message: user_pw
-            });
-        });
-
-    });
-});
 
 // 아이디 체크
 router.post('/id_check', function (request, response) {
