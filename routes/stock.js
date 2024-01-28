@@ -21,9 +21,10 @@ router.get('/all_coin_info', (req, res) => {
         });
 });
 // 코인 캔들 정보 가져오기
-router.get('/coin_info_candle/:coin', (req, res) => {
+router.get('/coin_info_candle/:coin/:time', (req, res) => {
     const coin = req.params.coin;
-    axios.get(`https://api.bithumb.com/public/candlestick/${coin}_KRW/24h`)
+    const time = req.params.time;
+    axios.get(`https://api.bithumb.com/public/candlestick/${coin}_KRW/${time}`)
         .then(response => {
             const coin_info = response.data;
             res.status(200).json(coin_info);
@@ -105,4 +106,41 @@ router.post('/check_like', (req, res) => {
         }
     });
 });
+
+// 찜한 목록 종목 정보를 가져오기
+router.post('/like_stock_info', (req, res) => {
+    const USER_NO = req.body.user_no;
+    const stock_like_check = sql.stock_like_check;
+
+    db.query(stock_like_check, [USER_NO], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: '찜한 목록을 가져오는 중에 오류가 발생했습니다.' });
+        } else {
+            if(result.length === 0){
+                res.status(200).json({ success: false });
+            } else {
+                let like_stock_list = [];
+                axios.get(`https://api.bithumb.com/public/ticker/ALL_KRW`)
+                    .then(response => {
+                        const coin_info = response.data;
+                        for(let i = 0; i < result.length; i++){
+                            const coin_info_result = Object.keys(coin_info.data).filter(key => key.includes(result[i].STOCK_NAME)).reduce((obj, key) => {
+                                obj[key] = coin_info.data[key];
+                                return obj;
+                            }, {});
+                            like_stock_list.push(coin_info_result);
+                        }
+                        res.status(200).json(like_stock_list);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        res.status(500).json({ error: '코인 정보를 가져오는 중에 오류가 발생했습니다.' });
+                    }
+                )
+            }
+        }
+    })
+});
+
 module.exports = router;
