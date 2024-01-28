@@ -141,6 +141,51 @@ router.post('/findId', function (request, response, next) {
 });
 
 // 비번 찾기
+//비번찾기
+router.post('/find_pass', function (request, response, next) {
+    const email = request.body.email;
+    const name = request.body.name;
+
+    db.query(sql.find_pass, [email, name], async function (error, results, fields) {
+        if (error) {
+            console.error(error);
+            return response.status(500).json({ error: '회원 에러' });
+        }
+
+        if (results.length == 0) {
+            // 이메일이 데이터베이스에 존재하지 않는 경우
+            return response.status(404).json({ message: 'user_not_found' });
+        }
+
+        const password= generateTempPassword(); // 임시 비밀번호 생성
+        function generateTempPassword() {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let tempPassword = '';
+            for (let i = 0; i < 8; i++) {
+                tempPassword += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return tempPassword;
+        }
+
+        const encryptedPW = bcrypt.hashSync(password, 10); // 임시 비밀번호 암호화
+
+        // 업데이트
+        db.query(sql.pass_update, [encryptedPW, name, email], function (error, results, fields) {
+            if (error) {
+                console.error(error);
+                return response.status(500).json({ error: '비번 에러' });
+            }
+            console.log(results);
+            return response.status(200).json({
+                message: password,
+                dbResult: results
+            });
+        });
+
+    });
+});
+
+// 임시 비밀번호 메일 전솔
 
 // 아이디 체크
 router.post('/id_check', function (request, response) {

@@ -28,4 +28,6 @@ module.exports = {
     stock_like_check : `SELECT STOCK_NAME FROM TB_MYSTOCK WHERE USER_NO=?`,
     check_id: `SELECT id FROM tb_user WHERE email=? and name=?`,
     check_pw: `SELECT password FROM tb_user WHERE email=? and name=?`,
+    find_pass:`SELECT password FROM tb_user WHERE email=? and name = ?`,
+    pass_update: 'UPDATE tb_user SET password = ? WHERE name = ? and email = ?',
 }
