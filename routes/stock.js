@@ -167,7 +167,7 @@ router.post('/update_simulatedAmount', (req, res) => {
     db.query(sql.simulatedAmount, [user_no], (err, result) => {
         if(!sell){
             // 매수일 경우
-            if(result[0].simulatedamount < trade_price){
+            if(result[0].simulatedamount < trade_price * trade_amount){
                 // 시뮬레이션 금액이 부족할 경우
                 return res.status(200).json({ message : '금액이 부족합니다.' });
             }
