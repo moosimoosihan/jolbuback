@@ -142,6 +142,30 @@ router.post('/findId', function (request, response, next) {
 
 // 비번 찾기
 //비번찾기
+
+const nodemailer = require("nodemailer");
+
+const email = {
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 2525,
+    secure: false,
+    auth: {
+        user: "af26b5eeb9f691",
+        pass: "3a1c8ef8a7235a"
+    }
+};
+
+const send = async (data) => {
+    const transporter = nodemailer.createTransport(email);
+    try {
+        const info = await transporter.sendMail(data);
+        console.log(info);
+        return info.response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 router.post('/find_pass', function (request, response, next) {
     const email = request.body.email;
     const name = request.body.name;
@@ -166,7 +190,6 @@ router.post('/find_pass', function (request, response, next) {
             }
             return tempPassword;
         }
-
         const encryptedPW = bcrypt.hashSync(password, 10); // 임시 비밀번호 암호화
 
         // 업데이트
@@ -181,11 +204,60 @@ router.post('/find_pass', function (request, response, next) {
                 dbResult: results
             });
         });
+        const user_pw = results[0].password; // 사용자 password를 가져옴
+        const content = {
+            from: "ktyeon92@gmail.com",
+            to: "i.e 72c7ef7b34-f2b458+1@inbox.mailtrap.io",
+            subject: "임시 비밀번호 발급",
+            text: "임시 비밀번호 발급",
+            html: `<strong>안녕하세요 ${name}님, 임시 비밀번호 발급을 완료하였습니다.<br> 마이페이지에서 해당 계정의 비밀번호를 변경해주세요.</strong><br>
+                임시 비밀번호 : ${user_pw}`
+        };
 
+        console.log(user_pw);
+        try {
+            await send(content);
+            return res.status(200).json({
+                message: '이메일이 발송되었습니다.'
+            });
+        } catch (error) {
+        }
     });
 });
 
-// 임시 비밀번호 메일 전솔
+// 임시 비밀번호 메일 전송
+
+
+
+router.post('/send', async (req, res) => {
+    const name = req.query.name;
+    const email = req.query.email;
+    const user_pw = res[0].password;
+
+    db.query(sql.check_pw, [email, name], async function (error, results) {
+        if (error) {
+            return res.status(500).json({
+                message: 'DB_error'
+            });
+        }
+        const user_pw = results[0].password; // 사용자 password를 가져옴
+        console.log(user_pw);
+        try {
+            await send(content);
+            return res.status(200).json({
+                message: '이메일이 발송되었습니다.'
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: '이메일 발송 실패'
+            });
+        }
+    });
+});
+
+
+
+
 
 // 아이디 체크
 router.post('/id_check', function (request, response) {
