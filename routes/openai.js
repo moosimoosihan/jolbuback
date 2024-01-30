@@ -78,8 +78,8 @@ router.post('/aichat', async (req, res) => {
             // 한달 이내에 실행한 적이 있다면 실행을 허용하지 않습니다.
             const lastAiDate = new Date(result[0].AI_DATE); //데이터베이스에서 가져온 값 (마지막 날짜)
             const currentDate = new Date(); //현재 실행된 시간
-            if (currentDate.getMonth() === lastAiDate.getMonth() && currentDate.getFullYear() === lastAiDate.getFullYear()) {
-                return res.status(200).json({message: '이미 한달 이내에 실행한 적이 있습니다.'});
+            if (currentDate.getMinutes() === lastAiDate.getMinutes() && currentDate.getDay() === lastAiDate.getDay()) {
+                return res.status(200).json({message: '이미 1분 이내에 실행한 적이 있습니다.'});
             }
             // 사용자의 관심 종목, 투자 성향 등 정보를 받아와 프롬포트 제작 후 ai에게 전달
             db.query(sql.mystock_list, [user_no], (err, result_myStock_list) => {
