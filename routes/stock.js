@@ -301,4 +301,21 @@ router.post('/sale_stock_info', (req, res) => {
     })
 })
 
+// 구매한 종목 갯수만 가져오기
+router.post('/sale_stock_amount', (req, res) => {
+    const user_no = req.body.user_no;
+    const stock_name = req.body.stock_name;
+    db.query(sql.check_mock_stock, [user_no, stock_name], (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '구매한 종목 없음' });
+        } else {
+            return res.status(200).json({ amount : result[0].MOCK_AMOUNT });
+        }
+    })
+})
+
 module.exports = router;
