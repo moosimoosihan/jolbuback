@@ -5,6 +5,7 @@ const sql = require('../sql.js');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const updateStock = require('../updateStock.js');
 
 // 주식 관련
 
@@ -13,6 +14,24 @@ router.get('/all_coin_info', (req, res) => {
     axios.get("https://api.bithumb.com/public/ticker/ALL_KRW")
         .then(response => {
             const coin_info = response.data;
+            const us = Object.entries(coin_info.data)
+                .map(([coin,info])=>({
+                code:coin,
+                opening_price: info.opening_price,
+                closing_price: info.closing_price,
+                min_price: info.min_price,
+                max_price: info.max_price,
+                units_traded: info.units_traded,
+                acc_trade_value: info.acc_trade_value,
+                prev_closing_price: info.prev_closing_price,
+                units_traded_24H: info.units_traded_24H,
+                acc_trade_value_24H: info.acc_trade_value_24H,
+                fluctate_24H: info.fluctate_24H,
+                fluctate_rate_24H: info.fluctate_rate_24H
+            }));
+            for(let i = 0; i < us.length-1; i++) {
+                updateStock(us[i]);
+            }
             res.status(200).json(coin_info);
         })
         .catch(error => {
