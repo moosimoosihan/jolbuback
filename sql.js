@@ -41,7 +41,7 @@ module.exports = {
     update_stock: `UPDATE tb_stock SET opening_price=?, high_price=?, low_price=?, trade_price=? WHERE code=?`,
     check_stock: `SELECT * FROM tb_stock WHERE code=?`,
     stock_info: `SELECT code, opening_price, high_price, low_price, trade_price FROM tb_stock WHERE code=?`,
-    stock_like: `INSERT INTO TB_MYSTOCK(USER_NO, STOCK_NAME, STOCK_AICONTENT) VALUE(?,?,1)`,
+    stock_like: `INSERT INTO TB_MYSTOCK(USER_NO, STOCK_NAME) VALUE(?,?)`,
     stock_like_delete: `DELETE FROM TB_MYSTOCK WHERE USER_NO=? AND STOCK_NAME=?`,
     stock_like_check : `SELECT STOCK_NAME FROM TB_MYSTOCK WHERE USER_NO=?`,
     mystock_list : `SELECT STOCK_NAME FROM TB_MYSTOCK WHERE USER_NO=?`,
