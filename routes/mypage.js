@@ -27,10 +27,10 @@ router.post('/mypageupdate', function (request, response, next) {
             return response.status(500).json({ error: 'mypage_update_error' });
         }
         return response.status(200).json({ message: 'Update successful' }); // 성공적인 경우 응답을 추가했습니다.
-    }); 
+    });
 });
 
-           
+
 //내 정보 가져오기
 router.get('/mypage/:user_no', function (request, response, next) {
     const user_no = request.params.user_no;
@@ -46,7 +46,7 @@ router.get('/mypage/:user_no', function (request, response, next) {
 
 
 
-//모의투자 목록 가져오기 
+//모의투자 목록 가져오기
 router.get('/mypageai/:user_no',function(request,response,next){
     const user_no = request.params.user_no;
 
