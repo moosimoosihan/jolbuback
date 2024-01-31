@@ -17,6 +17,12 @@ module.exports = {
 
     //마이페이지
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
+    get_AImock: `select * from tb_mock WHERE USER_NO = ? AND SELL_MOCK_DATE IS NOT NULL;`,
+    get_password: 'SELECT user_pw FROM tb_user WHERE user_no = ?',
+    pass_update: 'UPDATE tb_user SET user_pw = ? WHERE user_no = ?',
+    get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
+    mypage_update: `UPDATE tb_user SET name =?, email =?, pns =? WHERE user_no = ?`,
+    delete_user: `DELETE FROM tb_user WHERE user_id = ?`,
 
     // 모의 투자
     insert_mock_stock : `INSERT INTO tb_mock (USER_NO, MOCK_NAME, MOCK_PRICE, MOCK_AMOUNT) VALUES(?,?,?,?)`,
