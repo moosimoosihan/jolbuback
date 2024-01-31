@@ -36,11 +36,10 @@ module.exports = {
 
     check_pns : `SELECT pns FROM tb_user WHERE user_no=?`,
     update_pns : `UPDATE tb_user SET pns=? WHERE user_no=?`,
-    all_stock_info: `SELECT code, opening_price, high_price, low_price, trade_price FROM tb_stock`,
-    insert_stock: `INSERT INTO tb_stock(code, opening_price, high_price, low_price, trade_price) values(?, ?, ?, ?, ?)`,
-    update_stock: `UPDATE tb_stock SET opening_price=?, high_price=?, low_price=?, trade_price=? WHERE code=?`,
+    all_stock_info: `SELECT code, opening_price, closing_price, min_price, max_price, units_traded, acc_trade_value, prev_closing_price, units_traded_24H, acc_trade_value_24H, fluctate_24H, fluctate_rate_24H FROM tb_stock`,
+    insert_stock: `INSERT INTO tb_stock(code, opening_price, closing_price, min_price, max_price, units_traded, acc_trade_value, prev_closing_price, units_traded_24H, acc_trade_value_24H, fluctate_24H, fluctate_rate_24H) values(?,?,?,?,?,?,?,?,?,?,?,?)`,
+    update_stock: `UPDATE tb_stock SET opening_price=?, closing_price=?, min_price=?, max_price=?, units_traded=?, acc_trade_value=?, prev_closing_price=?, units_traded_24H=?, acc_trade_value_24H=?, fluctate_24H=?, fluctate_rate_24H=? WHERE code=?`,
     check_stock: `SELECT * FROM tb_stock WHERE code=?`,
-    stock_info: `SELECT code, opening_price, high_price, low_price, trade_price FROM tb_stock WHERE code=?`,
     stock_like: `INSERT INTO TB_MYSTOCK(USER_NO, STOCK_NAME) VALUE(?,?)`,
     stock_like_delete: `DELETE FROM TB_MYSTOCK WHERE USER_NO=? AND STOCK_NAME=?`,
     stock_like_check : `SELECT STOCK_NAME FROM TB_MYSTOCK WHERE USER_NO=?`,
@@ -49,4 +48,13 @@ module.exports = {
     check_pw: `SELECT password FROM tb_user WHERE email=? and name=?`,
     find_pass:`SELECT password FROM tb_user WHERE email=? and name = ?`,
     pass_update: 'UPDATE tb_user SET password = ? WHERE name = ? and email = ?',
+
+    // 관리자
+    admin_check : `SELECT ADMIN FROM tb_user WHERE USER_NO = ?`,
+    count_user: `SELECT COUNT(USER_NO) AS user_count FROM tb_user WHERE ADMIN = 0`,
+    count_admin: `SELECT COUNT(USER_NO) AS admin_count FROM tb_user WHERE ADMIN = 1`,
+    count_buy : `SELECT COUNT(*) AS buy_count FROM TB_MOCK`,
+    count_ai : `SELECT COUNT(*) AS ai_count FROM TB_AI`,
+    // 최근 7일 이내 구매한 날짜와 구매한 수
+    buyChart: `SELECT DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') AS date, COUNT(*) AS count FROM TB_MOCK WHERE SALE_MOCK_DATE IS NOT NULL AND SALE_MOCK_DATE >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ORDER BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ASC`,
 }

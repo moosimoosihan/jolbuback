@@ -53,10 +53,17 @@ ENGINE = InnoDB;
 DROP TABLE TB_STOCK;
 CREATE TABLE TB_STOCK (
 code varchar(50) not null unique,
-opening_price INT,
-high_price INT,
-low_price INT,
-trade_price INT)
+opening_price double not null,
+closing_price double not null,
+min_price double not null,
+max_price double not null,
+units_traded double not null,
+acc_trade_value double not null,
+prev_closing_price double not null,
+units_traded_24H double not null,
+acc_trade_value_24H double not null,
+fluctate_24H double not null,
+fluctate_rate_24H double not null)
 COMMENT = '주식가격'
 engine=InnoDB;
 
