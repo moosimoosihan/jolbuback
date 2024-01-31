@@ -64,4 +64,19 @@ router.get('/buyChart', function (request, response) {
     });
 });
 
+// 유저들의 수익률을 내림차순으로 정렬하여 가져오기
+router.get('/mock_rank', (req, res) => {
+    db.query(sql.mock_rank, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '유저 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
 module.exports = router;

@@ -57,6 +57,8 @@ module.exports = {
     count_admin: `SELECT COUNT(USER_NO) AS admin_count FROM tb_user WHERE ADMIN = 1`,
     count_buy : `SELECT COUNT(*) AS buy_count FROM TB_MOCK`,
     count_ai : `SELECT COUNT(*) AS ai_count FROM TB_AI`,
+    mock_rank :`select mock_name, sum(mock_amount) as sum_amount , avg(mock_amount) as amount_avg, max(mock_price)  as max_price, min(mock_price) as min_price, avg(mock_price) as avg_price from tb_mock group by mock_name order by sum_amount desc limit 5`,
+
     // 최근 7일 이내 구매한 날짜와 구매한 수
     buyChart: `SELECT DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') AS date, COUNT(*) AS count FROM TB_MOCK WHERE SALE_MOCK_DATE IS NOT NULL AND SALE_MOCK_DATE >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ORDER BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ASC`,
 }
