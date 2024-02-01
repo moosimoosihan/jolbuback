@@ -79,4 +79,19 @@ router.get('/mock_rank', (req, res) => {
     })
 })
 
+// 모든 유저 불러오기
+router.get('/get_alluser', (req, res) => {
+    db.query(sql.all_user, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '유저 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
 module.exports = router;
