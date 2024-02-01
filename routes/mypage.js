@@ -7,15 +7,50 @@ const bcrypt = require('bcrypt');
 
 // 회원 탈퇴
 router.delete('/mypageUser/:user_no', function (request, response, next) {
-    const userNo = request.params.user_no;
-
-    db.query(sql.delete_user, [userNo], function (error, result, fields) {
-        if (error) {
-            console.error(error);
-            return response.status(500).json({ error: '회원탈퇴에러' });
-        }
-        return response.status(200).json({ message: '회원탈퇴성공' });
-    });
+    const user_no = request.params.user_no;
+    // 모든 DELETE 쿼리를 순차적으로 실행
+    try{
+        db.query(sql.transacton, function(error,result,fields){
+            if(error){
+                console.error(error);
+                return response.status(500).json({message:'트랜잭션 에러'});
+            }
+        })
+        db.query(sql.delete_user1, [user_no], function(error, result, fields){
+            db.query(sql.delete_user2, [user_no], function(error, result, fields){
+                db.query(sql.delete_user3, [user_no], function(error, result, fields){
+                    db.query(sql.delete_user4, [user_no], function(error, result, fields){
+                        db.query(sql.delete_user5, [user_no], function(error, result, fields){
+                            // 모든 쿼리가 성공적으로 실행되면, 회원탈퇴성공 메시지를 반환
+                            db.query(sql.commit, function(error,result,fields){
+                                if(error){
+                                    console.error(error);
+                                    db.query(sql.rollback, function(error,result,fields){
+                                        if(error){
+                                            console.error(error);
+                                            return response.status(500).json({message:'rollback 에러 심각'});
+                                        }
+                                    })
+                                    return response.status(500).json({message:'커밋 에러'});
+                                }
+                                return response.status(200).json({ message: '회원탈퇴성공' });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    } catch(error) {
+        // 롤백 구문
+        db.query(sql.rollback, function(error,result,fields){
+            if(error){
+                console.error(error);
+                return response.status(500).json({message:'rollback 에러 심각'});
+            }
+        })
+        console.log(error)
+        return response.status(500).json({message:'DB 에러'});
+    }
 });
 
 // 정보 수정

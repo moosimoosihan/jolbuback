@@ -25,8 +25,18 @@ module.exports = {
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
     mypage_update: `UPDATE tb_user SET name =?, email =?, pns =? WHERE user_no = ?`,
     delete_user:`DELETE FROM tb_user WHERE USER_NO = ?;`,
-
     
+    //회원탈퇴
+    delete_user: `START TRANSACTION; DELETE FROM TB_SEARCH WHERE USER_NO = ?; DELETE FROM TB_MYSTOCK WHERE USER_NO = ?; DELETE FROM TB_MOCK WHERE USER_NO = ?; DELETE FROM TB_AI WHERE USER_NO = ?; DELETE FROM TB_ADMIN WHERE USER_NO = ?; DELETE FROM TB_USER WHERE USER_NO = ?; COMMIT;`,
+    delete_user1: `DELETE FROM TB_SEARCH WHERE USER_NO = ?`,
+    delete_user2: `DELETE FROM TB_MYSTOCK WHERE USER_NO = ?`,
+    delete_user3: `DELETE FROM TB_MOCK WHERE USER_NO = ?`,
+    delete_user4: `DELETE FROM TB_AI WHERE USER_NO = ?`,
+    delete_user5: `DELETE FROM TB_USER WHERE USER_NO = ?`,
+    transacton: `START TRANSACTION`,
+    rollback: `ROLLBACK`,
+    commit: `COMMIT`,
+
     // 모의 투자
     insert_mock_stock : `INSERT INTO tb_mock (USER_NO, MOCK_NAME, MOCK_PRICE, MOCK_AMOUNT) VALUES(?,?,?,?)`,
     simulatedAmount: `SELECT simulatedamount FROM tb_user WHERE user_no = ?`,
