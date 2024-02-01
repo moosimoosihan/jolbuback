@@ -14,12 +14,13 @@ module.exports = {
     ai_time_check : `select AI_DATE from tb_ai where user_no = ? ORDER BY AI_DATE desc limit 1`,
     update_ai: `update tb_ai set ai_date = ? where user_no = ?`,
     openai_response: `insert into tb_ai (user_no, ai_send, ai_response) values(?,?,?)`,
-    user_openai:`select ai_response,ai_date from tb_ai where user_no=?`,
+    user_openai:`select ai_response, ai_date, id from tb_ai as a join tb_user as b on a.user_no = b.user_no`,
     mypage_pass_update: 'UPDATE tb_user SET PASSWORD = ? WHERE user_no = ?',
 
     //마이페이지
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
     get_AImock: `select * from tb_mock WHERE USER_NO = ?`,
+    get_AImock_all: `SELECT tb_mock.*, tb_user.id FROM tb_mock join tb_user on tb_mock.user_no = tb_user.user_no;`,
     get_password: 'SELECT PASSWORD FROM tb_user WHERE user_no = ?',
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
     mypage_update: `UPDATE tb_user SET name =?, email =?, pns =? WHERE user_no = ?`,

@@ -94,7 +94,6 @@ router.get('/mypageai/:user_no', function (request, response, next) {
         response.json(processedResults);
     });
 });
-
 //모의투자 목록 가져오기
 router.get('/mypagemk/:user_no',function(request,response,next){
     const user_no = request.params.user_no;
