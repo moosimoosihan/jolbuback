@@ -63,7 +63,18 @@ router.get('/buyChart', function (request, response) {
         response.status(200).json(results);
     });
 });
+//모의투자 유저 목록져오기
+router.get('/mypagemkall/:user_no',function(request,response,next){
+    const user_no = request.params.user_no;
 
+    db.query(sql.get_AImock_all,[user_no],function(error,results,fields){
+        if (error) {
+            console.error(error);
+            return response.status(500).json({ error: '회원에러' });
+        }
+        response.json(results);
+    });
+})
 // 유저들의 수익률을 내림차순으로 정렬하여 가져오기
 router.get('/mock_rank', (req, res) => {
     db.query(sql.mock_rank, (err, result) => {
