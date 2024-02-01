@@ -25,17 +25,12 @@ module.exports = {
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,
     mypage_update: `UPDATE tb_user SET name =?, email =?, pns =? WHERE user_no = ?`,
     delete_user:`DELETE FROM tb_user WHERE USER_NO = ?;`,
-    
+
     //회원탈퇴
-    delete_user: `START TRANSACTION; DELETE FROM TB_SEARCH WHERE USER_NO = ?; DELETE FROM TB_MYSTOCK WHERE USER_NO = ?; DELETE FROM TB_MOCK WHERE USER_NO = ?; DELETE FROM TB_AI WHERE USER_NO = ?; DELETE FROM TB_ADMIN WHERE USER_NO = ?; DELETE FROM TB_USER WHERE USER_NO = ?; COMMIT;`,
-    delete_user1: `DELETE FROM TB_SEARCH WHERE USER_NO = ?`,
-    delete_user2: `DELETE FROM TB_MYSTOCK WHERE USER_NO = ?`,
-    delete_user3: `DELETE FROM TB_MOCK WHERE USER_NO = ?`,
-    delete_user4: `DELETE FROM TB_AI WHERE USER_NO = ?`,
-    delete_user5: `DELETE FROM TB_USER WHERE USER_NO = ?`,
-    transacton: `START TRANSACTION`,
-    rollback: `ROLLBACK`,
-    commit: `COMMIT`,
+    delete_user1: `DELETE FROM TB_MYSTOCK WHERE USER_NO = ?`,
+    delete_user2: `DELETE FROM TB_MOCK WHERE USER_NO = ?`,
+    delete_user3: `DELETE FROM TB_AI WHERE USER_NO = ?`,
+    delete_user4: `DELETE FROM TB_USER WHERE USER_NO = ?`,
 
     // 모의 투자
     insert_mock_stock : `INSERT INTO tb_mock (USER_NO, MOCK_NAME, MOCK_PRICE, MOCK_AMOUNT) VALUES(?,?,?,?)`,
@@ -46,6 +41,7 @@ module.exports = {
     delete_mock_stock : `UPDATE tb_mock SET SELL_MOCK_DATE = NOW() WHERE USER_NO = ? AND MOCK_NAME = ?`,
     update_mock_stock_amount : `UPDATE tb_mock SET MOCK_AMOUNT = ? WHERE USER_NO = ? AND MOCK_NAME = ?`,
     all_mock_stock: `SELECT MOCK_NAME, MOCK_PRICE, MOCK_AMOUNT FROM tb_mock WHERE USER_NO = ? AND SELL_MOCK_DATE IS NULL`,
+    rateRank: `SELECT u.name, sum(m.MOCK_RATE) as mock_rate FROM tb_mock m, tb_user u GROUP BY u.USER_NO = m.USER_NO ORDER BY mock_rate DESC LIMIT 10`,
 
     check_pns : `SELECT pns FROM tb_user WHERE user_no=?`,
     update_pns : `UPDATE tb_user SET pns=? WHERE user_no=?`,
@@ -70,6 +66,8 @@ module.exports = {
     count_ai : `SELECT COUNT(*) AS ai_count FROM TB_AI`,
     mock_rank :`select mock_name, sum(mock_amount) as sum_amount , avg(mock_amount) as amount_avg, max(mock_price)  as max_price, min(mock_price) as min_price, avg(mock_price) as avg_price from tb_mock group by mock_name order by sum_amount desc limit 5`,
     all_user : `select user_no, id, name, email, social, pns, simulatedamount, sign_date from tb_user where admin = 0`,
+    volume_rank : `SELECT code, units_traded FROM tb_stock ORDER BY units_traded DESC LIMIT 5`,
+    change_rank : `SELECT code, fluctate_rate_24H FROM tb_stock ORDER BY fluctate_rate_24H DESC LIMIT 5`,
 
     // 최근 7일 이내 구매한 날짜와 구매한 수
     buyChart: `SELECT DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') AS date, COUNT(*) AS count FROM TB_MOCK WHERE SALE_MOCK_DATE IS NOT NULL AND SALE_MOCK_DATE >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ORDER BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ASC`,
