@@ -18,7 +18,6 @@ router.post('/send', function(request, response) {
             console.error(error);
             return response.status(500).json({error: 'send_chat_error'});
         }
-        console.log(results);
         return response.status(200).json({
             message: 'success',
         });
