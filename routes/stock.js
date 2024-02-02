@@ -337,4 +337,19 @@ router.post('/sale_stock_amount', (req, res) => {
     })
 })
 
+// 모의 투자 변동률이 높은 유저의 순위를 10개만 가져오기
+router.get('/rateRank', (req, res) => {
+    db.query(sql.rateRank, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '유저 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
 module.exports = router;

@@ -63,7 +63,18 @@ router.get('/buyChart', function (request, response) {
         response.status(200).json(results);
     });
 });
+//모의투자 유저 목록져오기
+router.get('/mypagemkall/:user_no',function(request,response,next){
+    const user_no = request.params.user_no;
 
+    db.query(sql.get_AImock_all,[user_no],function(error,results,fields){
+        if (error) {
+            console.error(error);
+            return response.status(500).json({ error: '회원에러' });
+        }
+        response.json(results);
+    });
+})
 // 유저들의 수익률을 내림차순으로 정렬하여 가져오기
 router.get('/mock_rank', (req, res) => {
     db.query(sql.mock_rank, (err, result) => {
@@ -73,6 +84,51 @@ router.get('/mock_rank', (req, res) => {
         }
         if(result.length === 0){
             return res.status(200).json({ message : '유저 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
+// 모든 유저 불러오기
+router.get('/get_alluser', (req, res) => {
+    db.query(sql.all_user, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '유저 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
+// 최고 거래량 5개 종목 불러오기
+router.get('/volume_rank', (req, res) => {
+    db.query(sql.volume_rank, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '종목 없음' });
+        } else {
+            return res.status(200).json(result);
+        }
+    })
+})
+
+// 최고 변동량 5개 종목 불러오기
+router.get('/change_rank', (req, res) => {
+    db.query(sql.change_rank, (err, result) => {
+        if(err){
+            console.error(err);
+            return res.status(500).json({ error: 'DB 오류' });
+        }
+        if(result.length === 0){
+            return res.status(200).json({ message : '종목 없음' });
         } else {
             return res.status(200).json(result);
         }

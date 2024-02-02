@@ -7,14 +7,33 @@ const bcrypt = require('bcrypt');
 
 // 회원 탈퇴
 router.delete('/mypageUser/:user_no', function (request, response, next) {
-    const userNo = request.params.user_no;
-
-    db.query(sql.delete_user, [userNo], function (error, result, fields) {
-        if (error) {
+    const user_no = request.params.user_no;
+    // 모든 DELETE 쿼리를 순차적으로 실행
+    db.query(sql.delete_user1, [user_no], function(error, result, fields){
+        if(error){
             console.error(error);
             return response.status(500).json({ error: '회원탈퇴에러' });
         }
-        return response.status(200).json({ message: '회원탈퇴성공' });
+        db.query(sql.delete_user2, [user_no], function(error, result, fields){
+            if(error){
+                console.error(error);
+                return response.status(500).json({ error: '회원탈퇴에러' });
+            }
+            db.query(sql.delete_user3, [user_no], function(error, result, fields){
+                if(error){
+                    console.error(error);
+                    return response.status(500).json({ error: '회원탈퇴에러' });
+                }
+                db.query(sql.delete_user4, [user_no], function(error, result, fields){
+                    if(error){
+                        console.error(error);
+                        return response.status(500).json({ error: '회원탈퇴에러' });
+                    }
+                    // 모든 쿼리가 성공적으로 실행되면, 회원탈퇴성공 메시지를 반환
+                    return response.status(200).json({ message: '회원탈퇴성공' });
+                });
+            });
+        });
     });
 });
 
@@ -94,7 +113,6 @@ router.get('/mypageai/:user_no', function (request, response, next) {
         response.json(processedResults);
     });
 });
-
 //모의투자 목록 가져오기
 router.get('/mypagemk/:user_no',function(request,response,next){
     const user_no = request.params.user_no;
