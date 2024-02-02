@@ -80,8 +80,8 @@ module.exports = {
     // 트리거 관련 쿼리
     rate_trigger:`
     CREATE TRIGGER update_mock_rate
-        AFTER UPDATE ON tb_stock
-        FOR EACH ROW
+    AFTER UPDATE ON tb_stock
+    FOR EACH ROW
     BEGIN
         DECLARE finished INTEGER DEFAULT 0;
         DECLARE mock_price_val FLOAT;
@@ -96,16 +96,16 @@ module.exports = {
     
         read_loop: LOOP
             FETCH cur INTO user_no_val, mock_name_val, mock_price_val;
-            
-            IF finished = 1 THEN
+    
+            IF finished = 1 THEN 
                 LEAVE read_loop;
             END IF;
-            
+    
             SET rate_val = (NEW.closing_price - mock_price_val) / mock_price_val * 100;
-            
+    
             UPDATE tb_mock SET mock_rate = rate_val WHERE user_no = user_no_val AND mock_name = mock_name_val;
         END LOOP;
-        
+    
         CLOSE cur;
     END;`,
     show_trigger: `SHOW TRIGGERS`,
