@@ -11,9 +11,9 @@ const updateStock = require('../updateStock.js');
 // 채팅 전송
 router.post('/send', function(request, response) {
     const chat_content = request.body.chat_content;
-    const chat_user = request.body.chat_user;
+    const user_no = request.body.user_no;
     // 채팅 전송후 db에 저장
-    db.query(sql.sendChat, [chat_content, chat_user], function(error, results, fields){
+    db.query(sql.sendChat, [chat_content, user_no], function(error, results, fields){
         if(error){
             console.error(error);
             return response.status(500).json({error: 'send_chat_error'});

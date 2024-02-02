@@ -37,9 +37,10 @@ app.use('/chat', chatRouter);
 io.on('connection', function(socket) {
     socket.on('chat', function(data){
         const msg = {
-            chat_user : data.chat_user,
+            user_no : data.user_no,
             name : data.name,
             chat_content : data.chat_content,
+            date: data.date
         }
         socket.broadcast.emit('chat', msg);
     });
