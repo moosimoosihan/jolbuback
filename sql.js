@@ -71,4 +71,9 @@ module.exports = {
 
     // 최근 7일 이내 구매한 날짜와 구매한 수
     buyChart: `SELECT DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') AS date, COUNT(*) AS count FROM TB_MOCK WHERE SALE_MOCK_DATE IS NOT NULL AND SALE_MOCK_DATE >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ORDER BY DATE_FORMAT(SALE_MOCK_DATE, '%Y-%m-%d') ASC`,
+
+    //채팅
+    sendChat: `INSERT INTO tb_chat (chat_content, chat_user) VALUES(?,?)`,
+    getChat: `SELECT * FROM tb_chat`,
+    get_name: `SELECT name FROM tb_user WHERE user_no = ?`,
 }
