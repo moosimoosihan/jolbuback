@@ -41,7 +41,7 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        SET rate_val = (mock_price_val - NEW.closing_price) / mock_price_val * 100;
+        SET rate_val = (NEW.closing_price - mock_price_val) / mock_price_val * 100;
 
         UPDATE tb_mock SET mock_rate = rate_val WHERE user_no = user_no_val AND mock_name = mock_name_val;
     END LOOP;
