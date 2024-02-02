@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const trigger = require('./trigger');
 const server = require('http').createServer(app); // http 서버 생성
 const io = require('socket.io')(server, {
     cors: {
@@ -18,7 +19,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+trigger();
 const authRouter = require('./routes/auth');
 const mypageRouter = require('./routes/mypage');
 const stockRouter = require('./routes/stock');
