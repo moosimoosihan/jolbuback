@@ -14,8 +14,9 @@ module.exports = {
     ai_time_check : `select AI_DATE from tb_ai where user_no = ? ORDER BY AI_DATE desc limit 1`,
     update_ai: `update tb_ai set ai_date = ? where user_no = ?`,
     openai_response: `insert into tb_ai (user_no, ai_send, ai_response) values(?,?,?)`,
-    user_openai:`select ai_response, ai_date, id from tb_ai as a join tb_user as b on a.user_no = b.user_no`,
+    user_openai:`select ai_response, ai_date, id from tb_ai as a join tb_user as b on a.user_no = b.user_no WHERE a.user_no = ?`,
     mypage_pass_update: 'UPDATE tb_user SET PASSWORD = ? WHERE user_no = ?',
+    all_openai : `select ai_response, ai_date, id from tb_ai as a join tb_user as b on a.user_no = b.user_no`,
 
     //마이페이지
     get_user_info: `SELECT * FROM TB_USER WHERE USER_NO =?`,

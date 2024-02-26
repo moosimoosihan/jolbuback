@@ -135,4 +135,19 @@ router.get('/change_rank', (req, res) => {
     })
 })
 
+router.get('/allai', function (request, response, next) {
+
+    db.query(sql.all_openai, function (error, results, fields) {
+        if (error) {
+            console.error(error);
+            return response.status(500).json({ error: '회원에러' });
+        }
+        const processedResults = results.map(result => ({
+            ...result,
+            ai_response: result.ai_response.replace(/[^\x00-\x7F]/g, ''), // 정규식을 사용하여 한글을 제외
+          }));
+        response.json(processedResults);
+    });
+});
+
 module.exports = router;
